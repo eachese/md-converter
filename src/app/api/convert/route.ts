@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { remark } from 'remark';
 import html from 'remark-html';
 import puppeteer from 'puppeteer';
-import chromium from '@sparticuz/chromium-min';
+import chromium from '@sparticuz/chromium';
 import htmlToDocx from 'html-to-docx';
 import path from 'path';
 

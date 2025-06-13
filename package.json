@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sparticuz/chromium-min": "^133.0.0",
+    "@sparticuz/chromium": "^133.0.0",
     "autoprefixer": "^10.4.21",
     "encoding": "^0.1.13",
     "html-to-docx": "^1.8.0",
