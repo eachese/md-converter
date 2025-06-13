@@ -1,19 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { remark } from 'remark';
 import html from 'remark-html';
 import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium-min';
 import htmlToDocx from 'html-to-docx';
+import path from 'path';
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-fs.mkdirSync(uploadDir, { recursive: true });
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,8 +24,6 @@ export async function POST(req: NextRequest) {
     const mdContent = await file.text();
     const processedContent = await remark().use(html).process(mdContent);
     const htmlContent = processedContent.toString();
-
-    const fileName = path.basename(file.name || 'document', '.md');
     
     // Convert to DOCX
     const docxBuffer = await htmlToDocx(htmlContent, undefined, {
@@ -36,12 +31,19 @@ export async function POST(req: NextRequest) {
         footer: true,
         pageNumber: true,
     });
-    const docxPath = path.join(uploadDir, `${fileName}.docx`);
-    fs.writeFileSync(docxPath, Buffer.from(docxBuffer as ArrayBuffer));
-    const docxUrl = `/uploads/${fileName}.docx`;
+    const docxBlob = new Blob([docxBuffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 
     // Convert to PDF
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch(
+        process.env.NODE_ENV === 'production'
+        ? {
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+        }
+        : { headless: true }
+    );
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
     const pdfBuffer = await page.pdf({
@@ -55,12 +57,13 @@ export async function POST(req: NextRequest) {
         },
     });
     await browser.close();
-
-    const pdfPath = path.join(uploadDir, `${fileName}.pdf`);
-    fs.writeFileSync(pdfPath, pdfBuffer);
-    const pdfUrl = `/uploads/${fileName}.pdf`;
+    const pdfBlob = new Blob([pdfBuffer], { type: 'application/pdf' });
     
-    return NextResponse.json({ docx: docxUrl, pdf: pdfUrl });
+    const responseFormData = new FormData();
+    responseFormData.append('docx', docxBlob, `${path.basename(file.name, '.md')}.docx`);
+    responseFormData.append('pdf', pdfBlob, `${path.basename(file.name, '.md')}.pdf`);
+
+    return new NextResponse(responseFormData);
   } catch (error) {
     const err = error as Error;
     console.error('Conversion failed:', err);

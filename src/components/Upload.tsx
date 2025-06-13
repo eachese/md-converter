@@ -62,9 +62,16 @@ export default function Upload() {
         throw new Error(errorData.error || 'Something went wrong');
       }
 
-      const { docx, pdf } = await response.json();
-      setDocxUrl(docx);
-      setPdfUrl(pdf);
+      const responseFormData = await response.formData();
+      const docxBlob = responseFormData.get('docx') as Blob;
+      const pdfBlob = responseFormData.get('pdf') as Blob;
+
+      if (docxBlob) {
+        setDocxUrl(URL.createObjectURL(docxBlob));
+      }
+      if (pdfBlob) {
+        setPdfUrl(URL.createObjectURL(pdfBlob));
+      }
 
     } catch (err) {
         if (err instanceof Error) {
