@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Markdown Converter
+
+A simple yet powerful web application to convert your Markdown files into DOCX and PDF formats seamlessly. Built with modern web technologies, it's designed to be fast, reliable, and easy to use.
+
+## Live Demo
+
+[You can access the deployed application here.]() <!-- TODO: Add your Vercel deployment URL here -->
+
+## Features
+
+-   **Markdown to DOCX & PDF:** Convert `.md` files to both `.docx` and `.pdf` formats in a single operation.
+-   **Drag & Drop Interface:** Easily upload your files using a modern drag-and-drop zone.
+-   **Serverless Ready:** Architected for modern serverless platforms like Vercel, ensuring scalability and cost-efficiency.
+-   **No File Storage:** Files are converted in-memory and sent directly to your browser, ensuring privacy and eliminating the need for server-side file management.
+-   **Responsive Design:** A clean and fully responsive user interface that works on all devices.
+
+## Tech Stack
+
+-   **Framework:** [Next.js](https://nextjs.org/)
+-   **UI Library:** [React](https://react.dev/)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+-   **PDF Generation:** [Puppeteer](https://pptr.dev/) (using `@sparticuz/chromium-min` for serverless environments)
+-   **DOCX Generation:** [html-to-docx](https://www.npmjs.com/package/html-to-docx)
+-   **Markdown Parsing:** [Remark](https://remark.js.org/)
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You need to have [Node.js](https://nodejs.org/en) (v20 or later) and a package manager like [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) installed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation & Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd md-converter
+    ```
 
-## Learn More
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application will be available at `http://localhost:3000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The project is configured to use the full `puppeteer` package for local development to ensure it works smoothly on Windows and macOS. For production builds, it automatically switches to the lightweight `@sparticuz/chromium-min` package.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy this Next.js application is to use the [Vercel Platform](https://vercel.com/new).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project is pre-configured for a zero-config deployment to Vercel.
+
+1.  **Push your code** to a Git repository (GitHub, GitLab, Bitbucket).
+2.  **Import your project** into Vercel.
+3.  **Deploy!**
+
+Vercel will automatically detect the Next.js framework and configure the build settings. No environment variables are required for the deployment.
